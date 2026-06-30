@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git to GitHub — Faculty Workshop | VISTAS</title>
+<style>
+  :root{
+    --bg:#0d1117;
+    --bg2:#161b22;
+    --bg3:#1c2330;
+    --border:#30363d;
+    --text:#e6edf3;
+    --muted:#8b949e;
+    --git:#f05133;
+    --git-soft:#ff8a65;
+    --hub:#58a6ff;
+    --hub-soft:#79c0ff;
+    --green:#3fb950;
+    --yellow:#d29922;
+    --purple:#bc8cff;
+    --pink:#ff7b9c;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    overflow:hidden;
+  }
+  body{
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(240,81,51,0.08), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(88,166,255,0.10), transparent 40%);
+  }
+  .deck{ position:relative; width:100vw; height:100vh; }
+  .slide{
+    position:absolute; inset:0;
+    display:none;
+    padding:64px 96px 80px 96px;
+    flex-direction:column;
+    opacity:0;
+    transform:translateX(24px);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .slide.active{ display:flex; opacity:1; transform:translateX(0); }
+  .slide.leaving{ display:flex; opacity:0; transform:translateX(-24px); }
+
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--git-soft);
+    margin-bottom:10px;
+  }
+  .eyebrow.hub{ color:var(--hub-soft); }
+  h1{ font-size:46px; margin:0 0 8px 0; line-height:1.15; }
+  h2{ font-size:34px; margin:0 0 18px 0; }
+  h3{ font-size:22px; margin:0 0 10px 0; color:var(--hub-soft); }
+  p{ font-size:19px; line-height:1.55; color:var(--text); }
+  .muted{ color:var(--muted); }
+  .content{ flex:1; min-height:0; display:flex; flex-direction:column; gap:18px; overflow:hidden; }
+
+  /* ---------- TITLE SLIDE ---------- */
+  .title-slide{ justify-content:center; align-items:flex-start; }
+  .logo-row{ display:flex; align-items:center; gap:18px; margin-bottom:28px; }
+  .badge{
+    width:64px;height:64px;border-radius:18px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:30px; font-weight:800;
+  }
+  .badge.git{ background:linear-gradient(135deg,#f05133,#ff8a65); }
+  .badge.hub{ background:linear-gradient(135deg,#161b22,#30363d); border:1px solid #444c56; }
+  .title-slide h1{ font-size:58px; background:linear-gradient(90deg,#fff,#c9d1d9); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .title-slide .subtitle{ font-size:24px; color:var(--hub-soft); margin-bottom:36px; }
+  .meta-card{
+    border:1px solid var(--border); background:var(--bg2); border-radius:var(--radius);
+    padding:22px 28px; max-width:640px;
+  }
+  .meta-card div{ font-size:17px; margin:5px 0; color:var(--text); }
+  .meta-card b{ color:var(--git-soft); }
+
+  /* ---------- DIVIDER SLIDE ---------- */
+  .divider{ justify-content:center; align-items:center; text-align:center; }
+  .divider .part-num{
+    font-size:120px; font-weight:900; opacity:.12; position:absolute; top:40px; right:80px;
+  }
+  .divider h2{ font-size:54px; margin-bottom:14px; }
+  .divider p{ font-size:22px; max-width:760px; }
+  .divider .bar{ width:120px; height:6px; background:linear-gradient(90deg,var(--git),var(--hub)); border-radius:4px; margin:24px 0; }
+
+  /* ---------- GENERIC CARD GRIDS ---------- */
+  .grid{ display:grid; gap:18px; flex:1; min-height:0; }
+  .grid.cols-2{ grid-template-columns:1fr 1fr; }
+  .grid.cols-3{ grid-template-columns:1fr 1fr 1fr; }
+  .grid.cols-4{ grid-template-columns:repeat(4,1fr); }
+  .card{
+    border:1px solid var(--border); background:var(--bg2);
+    border-radius:var(--radius); padding:20px 22px;
+    display:flex; flex-direction:column; gap:8px;
+    overflow:auto;
+  }
+  .card .icon{ font-size:28px; }
+  .card h3{ margin-bottom:4px; }
+  .card.git-accent{ border-top:4px solid var(--git); }
+  .card.hub-accent{ border-top:4px solid var(--hub); }
+  .card.green-accent{ border-top:4px solid var(--green); }
+  .card.yellow-accent{ border-top:4px solid var(--yellow); }
+  .card.purple-accent{ border-top:4px solid var(--purple); }
+  .card ul{ margin:4px 0 0 0; padding-left:20px; }
+  .card li{ font-size:16px; margin:5px 0; color:var(--text); }
+
+  .example{
+    margin-top:auto;
+    flex-shrink:0;
+    background:rgba(88,166,255,0.08);
+    border-left:3px solid var(--hub);
+    padding:10px 14px; border-radius:8px;
+    font-size:15px; color:var(--hub-soft);
+  }
+  .example b{ color:#fff; }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{ flex:1; display:flex; align-items:center; position:relative; min-height:0; }
+  .timeline::before{
+    content:""; position:absolute; left:0; right:0; top:50%; height:3px;
+    background:linear-gradient(90deg,var(--git),var(--hub)); transform:translateY(-50%);
+  }
+  .timeline-track{ display:flex; justify-content:space-between; width:100%; position:relative; }
+  .t-item{ flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 8px; position:relative; }
+  .t-item .dot{ width:16px; height:16px; border-radius:50%; background:var(--bg); border:3px solid var(--git-soft); margin-bottom:10px; z-index:2; }
+  .t-item:nth-child(even) .dot{ border-color:var(--hub-soft); }
+  .t-item .year{ font-weight:800; color:var(--git-soft); font-size:18px; }
+  .t-item:nth-child(even) .year{ color:var(--hub-soft); }
+  .t-item .label{ font-size:14px; color:var(--text); margin-top:4px; }
+  .t-item .desc{ font-size:12px; color:var(--muted); margin-top:4px; }
+
+  /* ---------- DIAGRAM (flow boxes) ---------- */
+  .flow{ flex:1; display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .flow-box{
+    border:2px solid var(--border); background:var(--bg2); border-radius:12px;
+    padding:18px 22px; min-width:160px; text-align:center;
+  }
+  .flow-box .ttl{ font-weight:700; font-size:17px; margin-bottom:6px; }
+  .flow-box .sub{ font-size:13px; color:var(--muted); }
+  .flow-box.git{ border-color:var(--git); }
+  .flow-box.hub{ border-color:var(--hub); }
+  .flow-arrow{ font-size:26px; color:var(--muted); display:flex; flex-direction:column; align-items:center; }
+  .flow-arrow .cmd{ font-family:"Cascadia Code","Consolas",monospace; font-size:13px; color:var(--green); margin-top:4px; }
+
+  /* ---------- COMMAND CARDS ---------- */
+  .cmd-card{
+    border:1px solid var(--border); background:var(--bg2); border-radius:10px;
+    padding:14px 18px; display:flex; flex-direction:column; gap:4px;
+  }
+  .cmd-card code{
+    font-family:"Cascadia Code","Consolas",monospace; font-size:16px;
+    background:#0a0e14; color:var(--green); padding:4px 10px; border-radius:6px; display:inline-block;
+    border:1px solid #21262d;
+  }
+  .cmd-card .desc{ font-size:14.5px; color:var(--text); margin-top:2px; }
+
+  /* ---------- TABLE ---------- */
+  table.cmp{ width:100%; border-collapse:collapse; font-size:16px; }
+  table.cmp th{ text-align:left; padding:10px 14px; background:var(--bg3); color:var(--hub-soft); border-bottom:2px solid var(--border); }
+  table.cmp td{ padding:10px 14px; border-bottom:1px solid var(--border); }
+  table.cmp tr:hover td{ background:rgba(255,255,255,0.02); }
+
+  /* ---------- QUIZ ---------- */
+  .quiz-slide{ justify-content:center; }
+  .quiz-q{ font-size:26px; font-weight:700; margin-bottom:22px; }
+  .quiz-opts{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .quiz-opt{
+    border:2px solid var(--border); background:var(--bg2); border-radius:10px;
+    padding:16px 18px; font-size:17px;
+  }
+  .quiz-opt.correct{ border-color:var(--green); background:rgba(63,185,80,0.10); }
+  .reveal-hint{ margin-top:24px; font-size:14px; color:var(--muted); }
+  .answer-box{
+    margin-top:20px; padding:16px 20px; border-radius:10px;
+    background:rgba(63,185,80,0.08); border-left:4px solid var(--green);
+    font-size:17px; display:none;
+  }
+  .answer-box.show{ display:block; }
+  .quiz-num{ position:absolute; top:40px; right:60px; font-size:16px; color:var(--muted); }
+  .quiz-progress{ display:flex; gap:8px; margin-bottom:28px; }
+  .quiz-dot{ width:10px; height:10px; border-radius:50%; background:var(--border); transition:all .2s; }
+  .quiz-dot.active{ background:var(--git); width:32px; border-radius:5px; }
+  .quiz-dot.done{ background:var(--git-soft); opacity:.5; }
+  .quiz-icon{ font-size:40px; margin-bottom:18px; }
+
+  /* ---------- FOOTER / CHROME ---------- */
+  .progress-bar{ position:fixed; top:0; left:0; height:4px; background:linear-gradient(90deg,var(--git),var(--hub)); z-index:50; transition:width .3s ease; }
+  .slide-counter{
+    position:fixed; bottom:18px; right:28px; font-size:13px; color:var(--muted);
+    background:rgba(22,27,34,0.8); padding:5px 12px; border-radius:20px; border:1px solid var(--border);
+    z-index:50;
+  }
+  .kbd-hint{
+    position:fixed; bottom:18px; left:28px; font-size:12px; color:var(--muted);
+    background:rgba(22,27,34,0.8); padding:5px 12px; border-radius:20px; border:1px solid var(--border);
+    z-index:50;
+  }
+  .kbd-hint kbd{ background:#21262d; border:1px solid #444c56; border-radius:4px; padding:1px 6px; font-size:11px; }
+  .deck-title-chip{
+    position:fixed; top:14px; left:28px; font-size:12px; color:var(--muted); z-index:50;
+    display:flex; align-items:center; gap:6px;
+  }
+  .deck-title-chip span.dotc{ width:8px;height:8px;border-radius:50%;background:var(--git); }
+
+  .scrollable{ overflow-y:auto; padding-right:6px; }
+  .scrollable::-webkit-scrollbar{ width:8px; }
+  .scrollable::-webkit-scrollbar-thumb{ background:var(--border); border-radius:4px; }
+
+  .big-emoji{ font-size:46px; margin-bottom:8px; }
+  .pill{ display:inline-block; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; margin-right:8px; }
+  .pill.git{ background:rgba(240,81,51,0.15); color:var(--git-soft); border:1px solid var(--git); }
+  .pill.hub{ background:rgba(88,166,255,0.15); color:var(--hub-soft); border:1px solid var(--hub); }
+
+  .two-col{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; flex:1; min-height:0; }
+  .checklist li{ list-style:none; font-size:17px; margin:10px 0; padding-left:28px; position:relative; }
+  .checklist li::before{ content:"✔"; position:absolute; left:0; color:var(--green); font-weight:800; }
+  .dontlist li::before{ content:"✘"; color:var(--pink); }
+
+  /* ---------- SVG DIAGRAMS ---------- */
+  .svg-wrap{ display:flex; justify-content:center; align-items:center; flex-shrink:0; }
+  .diagram-svg{ width:100%; max-width:540px; height:auto; display:block; }
+  .topo-svg{ width:100%; max-width:190px; height:118px; display:block; margin:0 auto; }
+
+  /* ---------- TERMINAL MOCKUP ---------- */
+  .terminal{ background:#0a0e14; border:1px solid #21262d; border-radius:10px; overflow:hidden; flex-shrink:0; }
+  .terminal-head{ display:flex; gap:6px; padding:7px 12px; background:#161b22; border-bottom:1px solid #21262d; }
+  .terminal-head span{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .terminal-head span:nth-child(1){ background:#ff5f56; }
+  .terminal-head span:nth-child(2){ background:#ffbd2e; }
+  .terminal-head span:nth-child(3){ background:#27c93f; }
+  .terminal-body{ padding:12px 16px; font-family:"Cascadia Code","Consolas",monospace; font-size:13.5px; line-height:1.65; color:#c9d1d9; white-space:pre-wrap; }
+  .terminal-body .prompt{ color:#3fb950; }
+  .terminal-body .out{ color:#8b949e; }
+  .terminal-body .added{ color:#3fb950; }
+  .terminal-body .removed{ color:#ff7b9c; }
+  .terminal-body .file{ color:#79c0ff; }
+  .terminal-body .hl{ color:#d29922; }
+
+  /* ---------- KANBAN MOCKUP ---------- */
+  .kanban{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; flex:1; min-height:0; }
+  .kanban-col{ background:var(--bg3); border-radius:10px; padding:12px; border:1px solid var(--border); display:flex; flex-direction:column; }
+  .kanban-col h4{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin:0 0 10px 0; }
+  .kanban-card{ background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:13.5px; margin-bottom:9px; }
+  .kanban-card.done{ opacity:.6; text-decoration:line-through; }
+
+  /* ---------- CONTRIBUTION GRAPH MOCKUP ---------- */
+  .contrib-grid{ display:grid; grid-template-columns:repeat(26, 1fr); gap:3px; }
+  .cs{ width:100%; aspect-ratio:1; border-radius:2px; background:#161b22; }
+  .cs:nth-child(3n+1){ background:#0e4429; }
+  .cs:nth-child(5n+2){ background:#006d32; }
+  .cs:nth-child(7n+3){ background:#26a641; }
+  .cs:nth-child(11n+4){ background:#39d353; }
+  .cs:nth-child(13n+5){ background:#161b22; }
+  .cs:nth-child(17n+6){ background:#006d32; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+<div class="deck-title-chip"><span class="dotc"></span> Git to GitHub — VISTAS Faculty Workshop</div>
+<div class="slide-counter" id="slideCounter">1 / 1</div>
+<div class="kbd-hint">Use <kbd>&#8594;</kbd> / <kbd>Space</kbd> next &nbsp; <kbd>&#8592;</kbd> prev &nbsp; <kbd>Home</kbd>/<kbd>End</kbd></div>
+
+<div class="deck" id="deck">
+
+<!-- ============================================================ -->
+<!-- 1. TITLE -->
+<!-- ============================================================ -->
+<section class="slide title-slide">
+  <div class="logo-row">
+    <div class="badge git">⌥</div>
+    <div class="badge hub">🐙</div>
+  </div>
+  <h1>Git to GitHub</h1>
+  <div class="subtitle">A Hands-On Foundation for Faculty — Version Control, Demystified</div>
+  <div class="meta-card">
+    <div><b>Institution:</b> Vels Institute of Science, Technology &amp; Advanced Studies (VISTAS)</div>
+    <div><b>Audience:</b> Faculty — first version control journey</div>
+    <div><b>Duration:</b> 2 hours</div>
+    <div><b>Level:</b> Basic → Medium fundamentals</div>
+    <div><b>Goal:</b> Use Git/GitHub confidently &amp; mentor students for projects, assignments and interview portfolios</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 2. WELCOME / WHY THIS MATTERS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Welcome</div>
+  <h2>Why This Workshop Matters to You</h2>
+  <div class="content">
+    <div class="grid cols-3">
+      <div class="card git-accent">
+        <div class="icon">🎓</div>
+        <h3>For Your Teaching</h3>
+        <p>Manage lab manuals, question papers and course material with full history — no more <i>"final_v3_USE_THIS"</i> files.</p>
+        <p style="font-size:15px;" class="muted">Every revision is timestamped and attributable — useful for NAAC/NBA audit trails too.</p>
+      </div>
+      <div class="card hub-accent">
+        <div class="icon">🧑‍🤝‍🧑</div>
+        <h3>For Mentoring</h3>
+        <p>Every internship, hackathon and placement drive today expects students to show a GitHub profile. You'll guide that journey.</p>
+        <p style="font-size:15px;" class="muted">Companies increasingly screen candidates by their GitHub activity before the first interview round.</p>
+      </div>
+      <div class="card purple-accent">
+        <div class="icon">📑</div>
+        <h3>For Research</h3>
+        <p>Co-author papers, track reviewer changes, and never lose a version again — collaboration with a full audit trail.</p>
+        <p style="font-size:15px;" class="muted">Works for LaTeX manuscripts, datasets, and grant proposal drafts shared across institutions.</p>
+      </div>
+    </div>
+    <div class="example">
+      <b>Real world:</b> Three faculty members co-editing a question bank over email end up with <i>QB_Final.docx</i>, <i>QB_Final_v2.docx</i>, <i>QB_Final_Anand_edits.docx</i> — and nobody knows which one is current, or what changed between them. Version control fixes this permanently, and by the end of this session you'll know exactly how.
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 3. AGENDA -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Roadmap</div>
+  <h2>Our 2 Hours Together</h2>
+  <div class="content scrollable">
+    <div class="grid cols-2">
+      <div class="card git-accent"><h3>Part 1 · 20 min</h3><p>History, purpose &amp; types of version control + the story of Git</p></div>
+      <div class="card git-accent"><h3>Part 2 · 35 min</h3><p>Git fundamentals — setup, the 3 trees, daily commands, branching &amp; merging</p></div>
+      <div class="card hub-accent"><h3>Part 3 · 15 min</h3><p>Remotes, undo toolkit &amp; good commit hygiene</p></div>
+      <div class="card hub-accent"><h3>Part 4 · 25 min</h3><p>GitHub essentials — collaboration, Issues, Projects, Actions, Pages</p></div>
+      <div class="card purple-accent"><h3>Part 5 · 15 min</h3><p>Mentoring students — workflows, portfolios, do's &amp; don'ts</p></div>
+      <div class="card yellow-accent"><h3>Wrap-up · 10 min</h3><p>Quick quiz, recap &amp; Q&amp;A — plus a printable cheat sheet to take home</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 4. DIVIDER: PART 1 -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">01</div>
+  <div class="eyebrow">Part 1</div>
+  <h2>History &amp; Purpose of Version Control</h2>
+  <div class="bar"></div>
+  <p>Before we touch a single Git command, let's understand the problem version control was built to solve — and how that solution evolved over 50 years.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 5. PROBLEM BEFORE VCS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">The Problem</div>
+  <h2>Life Before Version Control</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-2" style="flex:none;">
+      <div class="card">
+        <div class="icon">📁</div>
+        <h3>The Familiar Folder Mess</h3>
+        <ul>
+          <li>Syllabus_2023.docx</li>
+          <li>Syllabus_2023_revised.docx</li>
+          <li>Syllabus_2023_revised_FINAL.docx</li>
+          <li>Syllabus_2023_revised_FINAL_HOD_approved.docx</li>
+          <li>Syllabus_2023_revised_FINAL_HOD_approved(1).docx</li>
+        </ul>
+      </div>
+      <div class="card git-accent">
+        <div class="icon">💡</div>
+        <h3>What We Actually Needed</h3>
+        <ul>
+          <li>One file, many <b>tracked</b> changes over time</li>
+          <li>Know <b>who</b> changed <b>what</b>, and <b>why</b></li>
+          <li>Safely try a new idea without losing the original</li>
+          <li>Merge two people's edits automatically</li>
+          <li>Roll back to any earlier point, instantly</li>
+          <li>One single, unambiguous "current" version, always</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid cols-3" style="flex:none;">
+      <div class="card" style="flex-direction:row; align-items:center; gap:10px; padding:10px 14px;"><span style="font-size:20px;">⏱️</span><p style="font-size:13.5px; margin:0;"><b style="color:#79c0ff;">Cost: Time</b> — hours lost manually comparing two documents line-by-line.</p></div>
+      <div class="card" style="flex-direction:row; align-items:center; gap:10px; padding:10px 14px;"><span style="font-size:20px;">😰</span><p style="font-size:13.5px; margin:0;"><b style="color:#79c0ff;">Cost: Risk</b> — one careless overwrite can destroy hours of someone's work, silently.</p></div>
+      <div class="card" style="flex-direction:row; align-items:center; gap:10px; padding:10px 14px;"><span style="font-size:20px;">🤷</span><p style="font-size:13.5px; margin:0;"><b style="color:#79c0ff;">Cost: Trust</b> — no way to prove who approved a change, or when.</p></div>
+    </div>
+    <div class="example"><b>Real world:</b> Every department has lived this exact pain with exam paper drafts, accreditation (NAAC/NBA) documents, and shared research drafts. Version control is the engineering answer to this very human problem.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 6. TIMELINE OF VCS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">A Brief History</div>
+  <h2>50 Years of Version Control</h2>
+  <div class="content">
+    <div class="timeline">
+      <div class="timeline-track">
+        <div class="t-item"><div class="dot"></div><div class="year">1972</div><div class="label">SCCS</div><div class="desc">Source Code Control System — Bell Labs, first true VCS</div></div>
+        <div class="t-item"><div class="dot"></div><div class="year">1982</div><div class="label">RCS</div><div class="desc">Revision Control System — stores diffs, single-file focus</div></div>
+        <div class="t-item"><div class="dot"></div><div class="year">1990</div><div class="label">CVS</div><div class="desc">Concurrent Versions System — first popular client-server VCS</div></div>
+        <div class="t-item"><div class="dot"></div><div class="year">2000</div><div class="label">SVN</div><div class="desc">Apache Subversion — fixed many CVS flaws, atomic commits</div></div>
+        <div class="t-item"><div class="dot"></div><div class="year">2005</div><div class="label">Git &amp; Mercurial</div><div class="desc">Distributed VCS era begins — speed, branching, no single server</div></div>
+        <div class="t-item"><div class="dot"></div><div class="year">2008+</div><div class="label">GitHub era</div><div class="desc">Social coding — Git gains a collaboration layer in the cloud</div></div>
+      </div>
+    </div>
+    <div class="example"><b>Pattern to notice:</b> Each generation solved the previous generation's biggest pain point — single-file → whole-project, server-dependent → distributed, command-line-only → social &amp; visual.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 7. TYPES OF VCS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Categories</div>
+  <h2>Three Types of Version Control Systems</h2>
+  <div class="content">
+    <div class="grid cols-3">
+      <div class="card">
+        <svg class="topo-svg" viewBox="0 0 240 160">
+          <circle cx="120" cy="62" r="22" fill="#161b22" stroke="#8b949e" stroke-width="2.5"/>
+          <text x="120" y="69" text-anchor="middle" font-size="18">💻</text>
+          <line x1="120" y1="84" x2="120" y2="106" stroke="#30363d" stroke-width="2"/>
+          <circle cx="120" cy="113" r="4" fill="#8b949e"/>
+          <line x1="120" y1="117" x2="120" y2="128" stroke="#30363d" stroke-width="2"/>
+          <circle cx="120" cy="135" r="4" fill="#8b949e" opacity="0.6"/>
+          <text x="120" y="30" text-anchor="middle" font-size="11" fill="#8b949e">history saved locally only</text>
+        </svg>
+        <h3>1. Local VCS</h3>
+        <p>A simple database on your own machine tracking file changes over time (e.g. RCS, 1982).</p>
+        <ul>
+          <li>✅ Simple, no setup needed</li>
+          <li>🚫 No sharing, no backup off-machine</li>
+        </ul>
+        <div class="example">Like keeping numbered photocopies of your draft in a personal drawer — works alone, not for teams.</div>
+      </div>
+      <div class="card">
+        <svg class="topo-svg" viewBox="0 0 240 160">
+          <line x1="120" y1="50" x2="60" y2="113" stroke="#30363d" stroke-width="2"/>
+          <line x1="120" y1="50" x2="120" y2="113" stroke="#30363d" stroke-width="2"/>
+          <line x1="120" y1="50" x2="180" y2="113" stroke="#30363d" stroke-width="2"/>
+          <rect x="100" y="22" width="40" height="30" rx="5" fill="#161b22" stroke="#58a6ff" stroke-width="2.5"/>
+          <text x="120" y="43" text-anchor="middle" font-size="15">🖥️</text>
+          <circle cx="60" cy="121" r="15" fill="#161b22" stroke="#8b949e" stroke-width="2"/>
+          <circle cx="120" cy="121" r="15" fill="#161b22" stroke="#8b949e" stroke-width="2"/>
+          <circle cx="180" cy="121" r="15" fill="#161b22" stroke="#8b949e" stroke-width="2"/>
+          <text x="60" y="126" text-anchor="middle" font-size="12">🙋</text>
+          <text x="120" y="126" text-anchor="middle" font-size="12">🙋</text>
+          <text x="180" y="126" text-anchor="middle" font-size="12">🙋</text>
+          <text x="120" y="152" text-anchor="middle" font-size="11" fill="#79c0ff">one server, many clients</text>
+        </svg>
+        <h3>2. Centralized VCS</h3>
+        <p>One central server holds the full history; everyone checks out from it (CVS, SVN).</p>
+        <ul>
+          <li>✅ One source of truth, simpler mental model</li>
+          <li>🚫 Server down ⇒ nobody can commit or see history</li>
+        </ul>
+        <div class="example">Like a single master register kept in the HOD's office — if the office is locked (server down), nobody can work.</div>
+      </div>
+      <div class="card git-accent">
+        <svg class="topo-svg" viewBox="0 0 240 170">
+          <line x1="60" y1="40" x2="180" y2="40" stroke="#30363d" stroke-width="2"/>
+          <line x1="60" y1="40" x2="60" y2="130" stroke="#30363d" stroke-width="2"/>
+          <line x1="60" y1="40" x2="180" y2="130" stroke="#30363d" stroke-width="2"/>
+          <line x1="180" y1="40" x2="60" y2="130" stroke="#30363d" stroke-width="2"/>
+          <line x1="180" y1="40" x2="180" y2="130" stroke="#30363d" stroke-width="2"/>
+          <line x1="60" y1="130" x2="180" y2="130" stroke="#30363d" stroke-width="2"/>
+          <circle cx="60" cy="40" r="15" fill="#161b22" stroke="#f05133" stroke-width="2.5"/>
+          <circle cx="180" cy="40" r="15" fill="#161b22" stroke="#f05133" stroke-width="2.5"/>
+          <circle cx="60" cy="130" r="15" fill="#161b22" stroke="#f05133" stroke-width="2.5"/>
+          <circle cx="180" cy="130" r="15" fill="#161b22" stroke="#f05133" stroke-width="2.5"/>
+          <text x="60" y="45" text-anchor="middle" font-size="12">💻</text>
+          <text x="180" y="45" text-anchor="middle" font-size="12">💻</text>
+          <text x="60" y="135" text-anchor="middle" font-size="12">💻</text>
+          <text x="180" y="135" text-anchor="middle" font-size="12">💻</text>
+          <text x="120" y="160" text-anchor="middle" font-size="11" fill="#ff8a65">every node = full copy</text>
+        </svg>
+        <h3>3. Distributed VCS</h3>
+        <p>Every collaborator has a <b>full copy</b> of the history on their own machine (Git, Mercurial).</p>
+        <ul>
+          <li>✅ Works offline, no single point of failure</li>
+          <li>✅ Any peer can become the new "server" instantly</li>
+        </ul>
+        <div class="example">Like every faculty member having a complete, identical copy of the register — work offline, sync later, no single point of failure.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 8. PURPOSE OF VCS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Why It Exists</div>
+  <h2>The Purpose of Version Control</h2>
+  <div class="content">
+    <div class="grid cols-4">
+      <div class="card"><div class="icon">🕒</div><h3>History</h3><p>Every change is timestamped, attributed and recoverable forever.</p><p style="font-size:14px;" class="muted">No more guessing which file is the "real" latest one.</p></div>
+      <div class="card"><div class="icon">🤝</div><h3>Collaboration</h3><p>Multiple people work on the same project without overwriting each other.</p><p style="font-size:14px;" class="muted">Git automatically merges non-conflicting edits to the same file.</p></div>
+      <div class="card"><div class="icon">🧪</div><h3>Safe Experimentation</h3><p>Try a risky change in isolation (a branch) without breaking the working version.</p><p style="font-size:14px;" class="muted">Delete the branch with zero consequence if the idea doesn't work out.</p></div>
+      <div class="card"><div class="icon">🛡️</div><h3>Accountability &amp; Backup</h3><p>Know exactly who changed what and why — and never truly lose work.</p><p style="font-size:14px;" class="muted">Every clone is itself a full, independent backup of the whole history.</p></div>
+    </div>
+    <div class="example"><b>Real world:</b> Three faculty co-authoring a research paper can each work in their own branch, see exactly which paragraph a co-author changed, and merge everything into one final draft — with the ability to undo any single change.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 9. DIVIDER: PART 2 (GIT STORY) -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">02</div>
+  <div class="eyebrow">Part 1 continued</div>
+  <h2>The Story of Git</h2>
+  <div class="bar"></div>
+  <p>Why did the world need yet another version control system in 2005, when CVS and SVN already existed?</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 10. GIT ORIGIN STORY -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Origin Story</div>
+  <h2>Born From a Crisis — April 2005</h2>
+  <div class="content">
+    <div class="two-col">
+      <div class="card git-accent">
+        <h3>The Linux Kernel Problem</h3>
+        <p>The Linux kernel — thousands of contributors worldwide — used a proprietary tool called <b>BitKeeper</b> to manage its source code for free.</p>
+        <p>In April 2005, the company withdrew the free license after a dispute. Linus Torvalds and the kernel team suddenly had <b>no version control system</b> for the world's largest collaborative codebase.</p>
+        <p>Linus's response: build a new one from scratch. In about <b>10 days</b>, the first working version of Git existed.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧑‍💻</div>
+        <h3>Design Goals Linus Set</h3>
+        <ul>
+          <li>Must be <b>fast</b> (kernel has 1000s of files)</li>
+          <li>Fully <b>distributed</b> — no single server to lose</li>
+          <li>Strong <b>integrity</b> guarantees against corruption/tampering</li>
+          <li>Cheap, instant <b>branching</b></li>
+          <li>Support fully <b>non-linear</b> workflows (thousands of parallel contributors)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="example"><b>Fun fact:</b> "Git" is British slang for an unpleasant person. Linus joked: "I'm an egotistical bastard, and I name all my projects after myself. First Linux, now Git."</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11. WHY GIT OVER OTHERS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">The Differentiator</div>
+  <h2>Why Git, When Others Already Existed?</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-2" style="flex:none;">
+      <div class="card" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">⚡ Speed</h3>
+        <p style="font-size:15px;">Most operations (commit, diff, log, branch) happen <b>locally</b> — no network round-trip.</p>
+        <p style="font-size:13px;" class="muted">The Linux kernel has 70,000+ files — Git still handles a commit in milliseconds.</p>
+      </div>
+      <div class="card" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">🌐 Truly Distributed</h3>
+        <p style="font-size:15px;">Every clone is a complete backup with full history — no "the server is down" moment.</p>
+        <p style="font-size:13px;" class="muted">Commit, branch and review history on a flight with no Wi-Fi; sync once you land.</p>
+      </div>
+      <div class="card" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">🌿 Cheap Branching</h3>
+        <p style="font-size:15px;">In CVS/SVN, branching was slow and "scary." In Git it takes milliseconds — so people actually use it.</p>
+        <p style="font-size:13px;" class="muted">A branch is just a 41-byte pointer to a commit — not a copy of the whole project.</p>
+      </div>
+      <div class="card" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">🔒 Data Integrity</h3>
+        <p style="font-size:15px;">Every snapshot is checksummed (SHA hash) — silent corruption is virtually impossible.</p>
+        <p style="font-size:13px;" class="muted">Change one character anywhere in history, and every hash after it changes too.</p>
+      </div>
+    </div>
+    <div class="example"><b>Real world analogy:</b> Centralized tools were like a single shared whiteboard photographed by a clerk. Git gave everyone their own whiteboard that perfectly syncs with everyone else's — work anywhere, even with no Wi-Fi.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12. GIT VS OTHER SCM -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Comparison</div>
+  <h2>Git vs. Other Source Code Management Tools</h2>
+  <div class="content">
+    <table class="cmp">
+      <tr><th>Aspect</th><th>CVS / SVN (Centralized)</th><th>Git (Distributed)</th></tr>
+      <tr><td>Repository copy</td><td>Only the central server has full history</td><td>Every clone has the <b>entire</b> history</td></tr>
+      <tr><td>Working offline</td><td>Very limited (need server for most actions)</td><td>Commit, branch, view history fully offline</td></tr>
+      <tr><td>Branching</td><td>Heavy, slow, often avoided</td><td>Instant, lightweight, encouraged</td></tr>
+      <tr><td>Data model</td><td>Stores file-by-file diffs</td><td>Stores whole-project snapshots</td></tr>
+      <tr><td>Speed</td><td>Network-dependent</td><td>Local-first, very fast</td></tr>
+      <tr><td>Single point of failure</td><td>Yes — central server</td><td>No — every copy is a full backup</td></tr>
+      <tr><td>Integrity checking</td><td>Limited</td><td>Cryptographic checksum (SHA) on everything</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 13. GIT VS GITHUB -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">The Most Confused Pair</div>
+  <h2>Git vs. GitHub — Not the Same Thing!</h2>
+  <div class="content">
+    <div class="flow">
+      <div class="flow-box git">
+        <div class="ttl">Git</div>
+        <div class="sub">A version control <b>tool</b><br>Runs on your computer<br>Free &amp; open source<br>Works with no internet</div>
+      </div>
+      <div class="flow-arrow">⇄<div class="cmd">push / pull / clone</div></div>
+      <div class="flow-box hub">
+        <div class="ttl">GitHub</div>
+        <div class="sub">A cloud <b>hosting + collaboration</b> service<br>Stores your Git repos online<br>Adds Issues, PRs, Actions, Pages<br>Owned by Microsoft</div>
+      </div>
+    </div>
+    <div class="grid cols-2">
+      <div class="card git-accent"><h3>Analogy</h3><p>Git is like <b>Microsoft Word</b> with Track Changes — the tool that does the actual versioning, on your laptop.</p></div>
+      <div class="card hub-accent"><h3>Analogy</h3><p>GitHub is like <b>Google Drive / OneDrive</b> — a cloud place to store, share and collaborate on those files with others.</p></div>
+    </div>
+    <div class="example"><b>Note:</b> GitHub isn't the only such service — GitLab and Bitbucket are popular alternatives that also host Git repositories. Git itself is independent of all of them.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 14. DIVIDER: PART 3 -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">03</div>
+  <div class="eyebrow">Part 2</div>
+  <h2>Git Fundamentals — Core Concepts</h2>
+  <div class="bar"></div>
+  <p>Now let's open a terminal mentally and learn how Git actually thinks — then the commands you'll use every single day.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 15. THREE TREES -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Mental Model</div>
+  <h2>The Three Areas of Git</h2>
+  <div class="content">
+    <div class="flow">
+      <div class="flow-box">
+        <div class="ttl">📝 Working Directory</div>
+        <div class="sub">Your actual files<br>where you edit</div>
+      </div>
+      <div class="flow-arrow">→<div class="cmd">git add</div></div>
+      <div class="flow-box git">
+        <div class="ttl">📦 Staging Area</div>
+        <div class="sub">Changes marked<br>"ready to save"</div>
+      </div>
+      <div class="flow-arrow">→<div class="cmd">git commit</div></div>
+      <div class="flow-box git">
+        <div class="ttl">🗄️ Repository (.git)</div>
+        <div class="sub">Permanent snapshot<br>in project history</div>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> echo "Added safety note" &gt;&gt; <span class="file">experiment5.md</span>
+<span class="prompt">$</span> git status
+  <span class="out">modified:</span>   <span class="file">experiment5.md</span>
+  <span class="hl">← working directory</span>
+<span class="prompt">$</span> git add experiment5.md
+<span class="prompt">$</span> git status
+  <span class="added">modified:</span>   <span class="file">experiment5.md</span>
+  <span class="hl">← staged, ready</span>
+<span class="prompt">$</span> git commit -m "Add safety note to Experiment 5"
+  [main 4a1f9c2] Add safety note to Experiment 5
+  <span class="hl">← saved to repo!</span></div>
+    </div>
+    <div class="example"><b>Real world:</b> Think of grading assignment scripts. <b>Working Directory</b> = the scripts on your desk you're marking. <b>Staging</b> = the pile you've finished marking and set aside to submit. <b>Commit</b> = officially handing that pile to the exam cell with a signed cover note (the commit message).</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 16. GIT SETUP -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Step 1</div>
+  <h2>Setting Up Git — Tell It Who You Are</h2>
+  <div class="content">
+    <div class="grid cols-2">
+      <div class="cmd-card"><code>git config --global user.name "Harinath K"</code><div class="desc">Sets the name attached to every commit you make on this machine.</div></div>
+      <div class="cmd-card"><code>git config --global user.email "you@vistas.ac.in"</code><div class="desc">Sets the email attached to every commit — should match your GitHub account email.</div></div>
+      <div class="cmd-card"><code>git config --list</code><div class="desc">View all current configuration settings.</div></div>
+      <div class="cmd-card"><code>git config --global init.defaultBranch main</code><div class="desc">Sets "main" as the default name for new repositories' first branch.</div></div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> git config --global user.name "Harinath K"
+<span class="prompt">$</span> git config --global user.email "harinath@vistas.ac.in"
+<span class="prompt">$</span> git config --list
+  <span class="out">user.name=Harinath K</span>
+  <span class="out">user.email=harinath@vistas.ac.in</span>
+  <span class="out">init.defaultbranch=main</span>
+  <span class="hl">← this machine is ready to commit</span></div>
+    </div>
+    <div class="example"><b>Real world:</b> This is exactly like writing your name and signature format once, before signing every exam answer script you evaluate — every commit is "signed" with this identity, forever.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 17. INIT VS CLONE -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Starting Out</div>
+  <h2>git init vs. git clone</h2>
+  <div class="content">
+    <div class="grid cols-2">
+      <div class="card git-accent">
+        <h3>🆕 git init</h3>
+        <div class="cmd-card"><code>git init</code><div class="desc">Turns the current folder into a brand-new, empty Git repository.</div></div>
+        <p>Use this when starting a fresh project from nothing.</p>
+        <div class="terminal">
+          <div class="terminal-head"><span></span><span></span><span></span></div>
+          <div class="terminal-body"><span class="prompt">$</span> mkdir nba-accreditation
+<span class="prompt">$</span> cd nba-accreditation
+<span class="prompt">$</span> git init
+  <span class="out">Initialized empty Git repository in</span>
+  <span class="file">.../nba-accreditation/.git/</span></div>
+        </div>
+        <div class="example">Like opening a brand-new register and writing "Page 1" — starting your own course notebook from scratch.</div>
+      </div>
+      <div class="card hub-accent">
+        <h3>📥 git clone</h3>
+        <div class="cmd-card"><code>git clone &lt;repo-url&gt;</code><div class="desc">Downloads a complete copy of an existing repository — files <i>and</i> full history.</div></div>
+        <p>Use this to start from a project that already exists on GitHub.</p>
+        <div class="terminal">
+          <div class="terminal-head"><span></span><span></span><span></span></div>
+          <div class="terminal-body"><span class="prompt">$</span> git clone https://github.com/vistas/lab-manual.git
+  <span class="out">Cloning into 'lab-manual'...</span>
+  <span class="out">Receiving objects: 100% (142/142), done.</span>
+  <span class="hl">← full history, on your disk</span></div>
+        </div>
+        <div class="example">Like photocopying a colleague's entire completed lab record — every page, every revision — to build on it yourself.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 18. DAILY LOOP -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">The Daily Loop</div>
+  <h2>status → add → commit</h2>
+  <div class="content">
+    <div class="grid cols-3">
+      <div class="cmd-card"><code>git status</code><div class="desc">Shows what changed: modified, new (untracked), or staged files. Your "where am I" command — run it constantly.</div></div>
+      <div class="cmd-card"><code>git add &lt;file&gt;</code><div class="desc">Moves a change into the staging area. Use <code>git add .</code> to stage everything changed.</div></div>
+      <div class="cmd-card"><code>git commit -m "message"</code><div class="desc">Permanently saves the staged snapshot to history with a description.</div></div>
+    </div>
+    <div class="flow">
+      <div class="flow-box">Edit a file</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">git status</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box git">git add</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box git">git commit</div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> git status
+  <span class="out">On branch main</span>
+  <span class="removed">modified:   syllabus.md</span>
+<span class="prompt">$</span> git add syllabus.md
+<span class="prompt">$</span> git commit -m "Update Unit 4 references for AY 2026-27"
+  <span class="out">[main 9c3a21f] Update Unit 4 references for AY 2026-27</span>
+  <span class="out"> 1 file changed, 6 insertions(+), 2 deletions(-)</span></div>
+    </div>
+    <div class="example"><b>Real world:</b> Updating a lab manual — you edit Experiment 5 (<i>working dir</i>), decide it's ready (<i>git add</i>), then save it as an official revision with a note: "Updated Experiment 5 — added safety precautions" (<i>git commit -m</i>). This loop repeats all day, every day.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 19. LOOKING BACK -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Inspecting History</div>
+  <h2>Looking Back — log, diff, show</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-2" style="flex:none;">
+      <div class="cmd-card"><code>git log</code><div class="desc">Lists all commits — author, date, message, unique ID (hash).</div></div>
+      <div class="cmd-card"><code>git log --oneline --graph</code><div class="desc">A compact, visual view of history — great for seeing branches.</div></div>
+      <div class="cmd-card"><code>git diff</code><div class="desc">Shows exact line-by-line changes not yet staged.</div></div>
+      <div class="cmd-card"><code>git diff --staged</code><div class="desc">Shows changes that ARE staged, about to be committed.</div></div>
+      <div class="cmd-card"><code>git show &lt;commit&gt;</code><div class="desc">Shows full details and changes of one specific commit.</div></div>
+      <div class="cmd-card"><code>git blame &lt;file&gt;</code><div class="desc">Shows who last changed each line, and in which commit.</div></div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> git log --oneline --graph
+  <span class="hl">*</span> 9c3a21f (HEAD -&gt; main) Update Unit 4 references
+  <span class="hl">*</span> 4a1f9c2 Add safety note to Experiment 5
+  <span class="hl">*</span> 7d02e88 Initial syllabus upload    <span class="out">← oldest commit</span></div>
+    </div>
+    <div class="example"><b>Real world:</b> A student's marks look wrong in the results sheet. <code>git blame</code> shows exactly who edited that row, and <code>git show</code> reveals exactly what changed and why — a complete audit trail.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 20. DIVIDER: BRANCHING -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">04</div>
+  <div class="eyebrow">Part 2 continued</div>
+  <h2>Branching &amp; Merging</h2>
+  <div class="bar"></div>
+  <p>Git's superpower: working on multiple ideas in parallel without them interfering with each other.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 21. BRANCHING CONCEPT -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Concept</div>
+  <h2>Why Branches Matter</h2>
+  <div class="content" style="gap:10px;">
+    <div class="svg-wrap">
+      <svg class="diagram-svg" viewBox="0 0 480 170" style="max-width:460px; max-height:135px;">
+        <line x1="40" y1="130" x2="440" y2="130" stroke="#58a6ff" stroke-width="3"/>
+        <path d="M160,130 C 200,130 200,60 240,60" stroke="#f05133" stroke-width="3" fill="none"/>
+        <line x1="240" y1="60" x2="320" y2="60" stroke="#f05133" stroke-width="3"/>
+        <path d="M320,60 C 360,60 360,130 400,130" stroke="#f05133" stroke-width="3" fill="none"/>
+        <circle cx="40" cy="130" r="8" fill="#0d1117" stroke="#58a6ff" stroke-width="3"/>
+        <circle cx="160" cy="130" r="8" fill="#0d1117" stroke="#58a6ff" stroke-width="3"/>
+        <circle cx="400" cy="130" r="9" fill="#0d1117" stroke="#58a6ff" stroke-width="3"/>
+        <circle cx="440" cy="130" r="8" fill="#0d1117" stroke="#58a6ff" stroke-width="3"/>
+        <circle cx="240" cy="60" r="8" fill="#0d1117" stroke="#f05133" stroke-width="3"/>
+        <circle cx="320" cy="60" r="8" fill="#0d1117" stroke="#f05133" stroke-width="3"/>
+        <text x="40" y="155" font-size="12" fill="#8b949e" text-anchor="middle">init</text>
+        <text x="160" y="155" font-size="12" fill="#79c0ff" text-anchor="middle">git switch -c syllabus-revision-2026</text>
+        <text x="280" y="40" font-size="12" fill="#ff8a65" text-anchor="middle">edits committed on the branch</text>
+        <text x="400" y="155" font-size="12" fill="#79c0ff" text-anchor="middle">git merge (approved)</text>
+        <text x="20" y="118" font-size="13" fill="#58a6ff" font-weight="bold">main</text>
+      </svg>
+    </div>
+    <div class="two-col">
+      <div class="card git-accent">
+        <h3>What is a branch?</h3>
+        <p>A branch is an independent, movable line of development — a parallel copy of the project where you can experiment freely.</p>
+        <p>The <b>main</b> (or <b>master</b>) branch is the stable, "always working" version. Create a new branch to build a feature or try an idea, then <b>merge</b> it back once ready.</p>
+      </div>
+      <div class="card">
+        <h3>Real world example</h3>
+        <p>You're revising a syllabus. You don't want to risk the version currently in use by students.</p>
+        <ul>
+          <li><code>main</code> branch → the syllabus currently approved &amp; published</li>
+          <li><code>syllabus-revision-2026</code> branch → your draft with proposed changes</li>
+          <li>Once the Board of Studies approves it → <b>merge</b> into <code>main</code></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 22. BRANCH COMMANDS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Commands</div>
+  <h2>Working With Branches</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-3" style="flex:none;">
+      <div class="cmd-card"><code>git branch</code><div class="desc">List all local branches; current one is marked with *.</div></div>
+      <div class="cmd-card"><code>git switch &lt;name&gt;</code><div class="desc">Switch to an existing branch (modern command).</div></div>
+      <div class="cmd-card"><code>git switch -c &lt;name&gt;</code><div class="desc">Create AND switch to a new branch in one step.</div></div>
+      <div class="cmd-card"><code>git merge &lt;name&gt;</code><div class="desc">Merge the named branch's changes into your current branch.</div></div>
+      <div class="cmd-card"><code>git branch -d &lt;name&gt;</code><div class="desc">Delete a branch once it's been merged in safely.</div></div>
+      <div class="cmd-card"><code>git branch -a</code><div class="desc">List all branches, including remote-tracking ones.</div></div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> git switch -c syllabus-revision-2026
+  <span class="out">Switched to a new branch 'syllabus-revision-2026'</span>
+<span class="prompt">$</span> git branch
+  <span class="out">  main</span>
+  <span class="added">* syllabus-revision-2026</span>
+  <span class="hl">← * marks your current branch</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 23. MERGE CONFLICTS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">When Things Collide</div>
+  <h2>Merge Conflicts — What &amp; How</h2>
+  <div class="content">
+    <div class="two-col">
+      <div class="card yellow-accent">
+        <svg class="diagram-svg" viewBox="0 0 360 150" style="max-width:340px;">
+          <path d="M30,30 C140,30 140,80 210,80" stroke="#58a6ff" stroke-width="3" fill="none"/>
+          <path d="M30,135 C140,135 140,80 210,80" stroke="#f05133" stroke-width="3" fill="none"/>
+          <circle cx="30" cy="30" r="7" fill="#0d1117" stroke="#58a6ff" stroke-width="3"/>
+          <circle cx="30" cy="135" r="7" fill="#0d1117" stroke="#f05133" stroke-width="3"/>
+          <circle cx="210" cy="80" r="16" fill="#d29922" opacity="0.18"/>
+          <text x="210" y="87" text-anchor="middle" font-size="18">⚠️</text>
+          <text x="30" y="18" font-size="11" fill="#79c0ff">main: rewords Q5</text>
+          <text x="30" y="150" font-size="11" fill="#ff8a65">co-faculty: changes Q5 marks</text>
+          <text x="250" y="60" font-size="12" fill="#d29922" font-weight="bold">Conflict —</text>
+          <text x="250" y="76" font-size="12" fill="#d29922" font-weight="bold">your decision</text>
+          <text x="250" y="92" font-size="12" fill="#d29922" font-weight="bold">needed</text>
+        </svg>
+        <h3>What causes it?</h3>
+        <p>Two branches changed the <b>same lines</b> of the <b>same file</b> differently. Git can't decide which version is "right" — it asks you.</p>
+        <div class="example"><b>Real world:</b> You and a co-faculty member both edited Question 5 of the same question paper in your own branches — one rewords it, the other changes the marks. Git flags this exact line for a human decision.</div>
+      </div>
+      <div class="card">
+        <h3>How to resolve</h3>
+        <ol>
+          <li>Open the file, read both versions</li>
+          <li>Manually edit to keep the correct/combined content</li>
+          <li>Remove the conflict markers</li>
+          <li><code>git add &lt;file&gt;</code> to mark it resolved</li>
+          <li><code>git commit</code> to complete the merge</li>
+        </ol>
+        <div class="terminal">
+          <div class="terminal-head"><span></span><span></span><span></span></div>
+          <div class="terminal-body"><span class="file">questionpaper.md</span>
+<span class="removed">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (main)</span>
+Q5. Explain normalization in DBMS. (5 marks)
+<span class="hl">=======</span>
+Q5. Explain database normalization with an example. (8 marks)
+<span class="added">&gt;&gt;&gt;&gt;&gt;&gt;&gt; co-faculty-edits</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 24. DIVIDER: REMOTES -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">05</div>
+  <div class="eyebrow">Part 3</div>
+  <h2>Working With Remotes</h2>
+  <div class="bar"></div>
+  <p>Your local repository is powerful alone — but the magic happens when it talks to a remote copy, like one on GitHub.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 25. REMOTE BASICS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Local ⇄ Remote</div>
+  <h2>Syncing With a Remote Repository</h2>
+  <div class="content" style="gap:12px;">
+    <div class="svg-wrap">
+      <svg class="diagram-svg" viewBox="0 0 420 150" style="max-width:380px; max-height:130px;">
+        <defs>
+          <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3fb950"/></marker>
+          <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#58a6ff"/></marker>
+        </defs>
+        <rect x="20" y="50" width="90" height="55" rx="8" fill="#161b22" stroke="#f05133" stroke-width="2.5"/>
+        <text x="65" y="84" text-anchor="middle" font-size="24">💻</text>
+        <text x="65" y="120" text-anchor="middle" font-size="13" fill="#ff8a65">Local Repo</text>
+        <path d="M115,68 L300,68" stroke="#3fb950" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+        <text x="207" y="58" text-anchor="middle" font-size="13" fill="#3fb950">git push</text>
+        <path d="M300,95 L115,95" stroke="#58a6ff" stroke-width="2.5" marker-end="url(#arrowBlue)"/>
+        <text x="207" y="113" text-anchor="middle" font-size="13" fill="#58a6ff">git pull</text>
+        <rect x="305" y="50" width="95" height="55" rx="8" fill="#161b22" stroke="#58a6ff" stroke-width="2.5"/>
+        <text x="352" y="84" text-anchor="middle" font-size="24">☁️</text>
+        <text x="352" y="120" text-anchor="middle" font-size="13" fill="#79c0ff">origin (GitHub)</text>
+      </svg>
+    </div>
+    <div class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span></div>
+      <div class="terminal-body"><span class="prompt">$</span> git push origin main
+  <span class="out">Enumerating objects: 5, done.</span>
+  <span class="added">main -&gt; main</span>
+  <span class="hl">← teammates can now git pull this</span></div>
+    </div>
+    <div class="grid cols-2" style="flex:none;">
+      <div class="cmd-card"><code>git remote add origin &lt;url&gt;</code><div class="desc">Link your local repo to a remote one, named "origin".</div></div>
+      <div class="cmd-card"><code>git remote -v</code><div class="desc">View the remotes currently configured.</div></div>
+      <div class="cmd-card"><code>git push / git pull origin main</code><div class="desc">Upload local commits, or download &amp; merge remote changes.</div></div>
+      <div class="cmd-card"><code>git fetch</code><div class="desc">Download remote changes WITHOUT merging — inspect first.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 26. UNDO TOOLKIT -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">"Oops" Commands</div>
+  <h2>The Undo Toolkit</h2>
+  <div class="content">
+    <table class="cmp">
+      <tr><th>Situation</th><th>Command</th><th>Effect</th></tr>
+      <tr><td>Undo edits in a file, not yet staged</td><td><code>git restore &lt;file&gt;</code></td><td>Reverts file to last committed version</td></tr>
+      <tr><td>Accidentally staged a file</td><td><code>git restore --staged &lt;file&gt;</code></td><td>Unstages it, keeps your edits</td></tr>
+      <tr><td>Undo the last commit, keep changes</td><td><code>git reset --soft HEAD~1</code></td><td>Commit removed, changes stay staged</td></tr>
+      <tr><td>Completely discard last commit &amp; changes</td><td><code>git reset --hard HEAD~1</code></td><td>⚠️ Destructive — changes are gone</td></tr>
+      <tr><td>Undo a commit that's already shared/pushed</td><td><code>git revert &lt;commit&gt;</code></td><td>Safely adds a NEW commit that undoes it</td></tr>
+      <tr><td>Need to switch tasks but not ready to commit</td><td><code>git stash</code></td><td>Temporarily shelves your unfinished changes</td></tr>
+      <tr><td>Bring shelved changes back</td><td><code>git stash pop</code></td><td>Restores the most recent stash</td></tr>
+    </table>
+    <div class="example"><b>Golden rule:</b> Once a commit is pushed and others may have it, prefer <code>git revert</code> over <code>git reset</code> — rewriting shared history causes chaos for collaborators.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 27. GOOD HYGIENE -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Best Practices</div>
+  <h2>.gitignore &amp; Good Commit Messages</h2>
+  <div class="content">
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>📄 .gitignore</h3>
+        <p>A file listing things Git should <b>never</b> track — temp files, passwords, build outputs, large datasets.</p>
+        <div class="cmd-card"><code>*.log<br>node_modules/<br>.env<br>__pycache__/</code></div>
+        <div class="example">Like telling a photocopier "don't copy the scrap pages and rough notes" — only the real document gets archived.</div>
+      </div>
+      <div class="card git-accent">
+        <h3>✍️ Commit Messages</h3>
+        <p class="muted" style="text-decoration:line-through">"fixed stuff", "update", "asdsa", "final final"</p>
+        <p><b>Good:</b> "Fix mark calculation bug in CO2 evaluation sheet"</p>
+        <ul>
+          <li>Short, present-tense summary line</li>
+          <li>Explain <i>why</i>, not just <i>what</i></li>
+          <li>One logical change per commit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 28. DIVIDER: PART 4 -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">06</div>
+  <div class="eyebrow">Part 4</div>
+  <h2>GitHub Essentials</h2>
+  <div class="bar"></div>
+  <p>Git gives you version control. GitHub turns it into a collaboration and project-management platform.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 29. LOCAL TO CLOUD -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Getting Connected</div>
+  <h2>From Local Folder to GitHub Repository</h2>
+  <div class="content">
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Option A: Start on GitHub</h3>
+        <ol>
+          <li>Click "New repository" on GitHub</li>
+          <li>Name it, add a README, choose visibility</li>
+          <li><code>git clone &lt;url&gt;</code> on your machine</li>
+          <li>Add files, commit, push</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Option B: Start Locally</h3>
+        <ol>
+          <li><code>git init</code> in your project folder</li>
+          <li>Create the empty repo on GitHub (no README)</li>
+          <li><code>git remote add origin &lt;url&gt;</code></li>
+          <li><code>git push -u origin main</code></li>
+        </ol>
+      </div>
+    </div>
+    <div class="example"><b>Tip:</b> <code>-u</code> (or <code>--set-upstream</code>) links your local branch to the remote one, so future <code>git push</code> / <code>git pull</code> need no extra arguments.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 30. FORK & PR -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Collaboration Model</div>
+  <h2>Fork vs. Clone, and the Pull Request</h2>
+  <div class="content" style="gap:10px;">
+    <div class="svg-wrap">
+      <svg class="diagram-svg" viewBox="0 0 460 175" style="max-width:380px; max-height:145px;">
+        <defs>
+          <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#bc8cff"/></marker>
+          <marker id="arrowGreen2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#3fb950"/></marker>
+        </defs>
+        <rect x="160" y="10" width="140" height="38" rx="6" fill="#161b22" stroke="#58a6ff" stroke-width="2.5"/>
+        <text x="230" y="34" text-anchor="middle" font-size="12" fill="#79c0ff">Original Repo (class)</text>
+        <path d="M210,48 C210,68 130,68 130,90" stroke="#bc8cff" stroke-width="2.5" fill="none" marker-end="url(#arrowPurple)"/>
+        <text x="95" y="68" font-size="12" fill="#bc8cff">fork</text>
+        <rect x="70" y="90" width="120" height="38" rx="6" fill="#161b22" stroke="#bc8cff" stroke-width="2.5"/>
+        <text x="130" y="113" text-anchor="middle" font-size="13" fill="#bc8cff">Your Fork</text>
+        <path d="M130,128 C130,145 200,145 200,160" stroke="#f05133" stroke-width="2.5" fill="none"/>
+        <text x="135" y="148" font-size="11" fill="#ff8a65">branch + commits</text>
+        <rect x="150" y="158" width="110" height="17" rx="5" fill="#161b22" stroke="#f05133" stroke-width="2"/>
+        <text x="205" y="171" text-anchor="middle" font-size="10" fill="#ff8a65">feature-branch</text>
+        <path d="M260,166 C 400,166 400,60 305,30" stroke="#3fb950" stroke-width="2.5" fill="none" marker-end="url(#arrowGreen2)"/>
+        <text x="345" y="105" font-size="12" fill="#3fb950" font-weight="bold">Pull Request</text>
+      </svg>
+    </div>
+    <div class="grid cols-2" style="flex:none;">
+      <div class="card hub-accent">
+        <h3>Fork vs. Clone</h3>
+        <p><b>Clone</b> = download a copy to your machine (you may not have permission to push back).</p>
+        <p><b>Fork</b> = your own copy of someone else's repo <i>on GitHub itself</i> — you fully own it and can propose changes back.</p>
+      </div>
+      <div class="card git-accent">
+        <h3>Pull Request (PR)</h3>
+        <p>A formal request: "Please review and merge my branch's changes into your branch/repo."</p>
+        <p>This is GitHub's core collaboration mechanism — code review happens here, line by line, with comments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 31. ISSUES & PROJECTS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Project Management</div>
+  <h2>Issues, Labels &amp; Project Boards</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-3" style="flex:none;">
+      <div class="card hub-accent" style="padding:14px 16px;"><div class="icon">🐛</div><h3 style="font-size:18px;">Issues</h3><p style="font-size:14.5px;">Track bugs, tasks, or ideas as individual items with discussion threads.</p></div>
+      <div class="card hub-accent" style="padding:14px 16px;"><div class="icon">🏷️</div><h3 style="font-size:18px;">Labels &amp; Milestones</h3><p style="font-size:14.5px;">Categorize ("bug", "enhancement") and group issues into deadlines/releases.</p></div>
+      <div class="card hub-accent" style="padding:14px 16px;"><div class="icon">📋</div><h3 style="font-size:18px;">Projects (Kanban)</h3><p style="font-size:14.5px;">Drag-and-drop boards — "To Do / In Progress / Done" — built into the repo.</p></div>
+    </div>
+    <div class="kanban" style="flex:none;">
+      <div class="kanban-col">
+        <h4>📥 To Do</h4>
+        <div class="kanban-card">Design database schema</div>
+        <div class="kanban-card">Write API documentation</div>
+      </div>
+      <div class="kanban-col">
+        <h4>🔨 In Progress</h4>
+        <div class="kanban-card">Build login page — <span class="pill hub" style="margin:0;">@student2</span></div>
+      </div>
+      <div class="kanban-col">
+        <h4>✅ Done</h4>
+        <div class="kanban-card done">Set up repository</div>
+        <div class="kanban-card done">Add project README</div>
+      </div>
+    </div>
+    <div class="example"><b>Real world:</b> Coordinating a final-year project team of 4 students? Create an Issue for each module ("Build login page", "Design database schema"), assign owners, and watch the Project board move from To Do to Done — exactly how industry teams manage software work.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 32. ACTIONS, PAGES, WIKI -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Automation &amp; Polish</div>
+  <h2>GitHub Actions, Pages &amp; Wiki</h2>
+  <div class="content">
+    <div class="grid cols-3">
+      <div class="card green-accent"><div class="icon">⚙️</div><h3>GitHub Actions</h3><p>Automate tasks on every push — run tests, check code style, even auto-grade assignments.</p><div class="example">Like an automatic invigilator that re-checks every submission instantly.</div></div>
+      <div class="card hub-accent"><div class="icon">🌍</div><h3>GitHub Pages</h3><p>Host a free website directly from a repository — perfect for a portfolio or project demo page.</p></div>
+      <div class="card purple-accent"><div class="icon">📖</div><h3>Wiki &amp; README</h3><p>Built-in documentation space for a project — explain setup, usage and design decisions.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 33. DIVIDER: PART 5 -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">07</div>
+  <div class="eyebrow">Part 5</div>
+  <h2>Mentoring Students</h2>
+  <div class="bar"></div>
+  <p>How to guide students through Git/GitHub for assignments, projects, and building an interview-ready portfolio.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- 34. STUDENT WORKFLOW -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">A Workflow to Teach</div>
+  <h2>Standard Workflow for Assignments &amp; Projects</h2>
+  <div class="content">
+    <div class="flow">
+      <div class="flow-box hub">Fork class repo</div><div class="flow-arrow">→</div>
+      <div class="flow-box hub">Clone locally</div><div class="flow-arrow">→</div>
+      <div class="flow-box git">git switch -c assignment-1</div><div class="flow-arrow">→</div>
+      <div class="flow-box git">Code + commit often</div><div class="flow-arrow">→</div>
+      <div class="flow-box git">git push</div><div class="flow-arrow">→</div>
+      <div class="flow-box hub">Open PR for submission</div><div class="flow-arrow">→</div>
+      <div class="flow-box hub">Faculty reviews via comments</div>
+    </div>
+    <div class="example"><b>Why this is powerful for grading:</b> The Pull Request becomes the submission. You can comment directly on specific lines of code, see exact commit timestamps (useful for late-submission policies), and students build real industry habits from day one.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 35. PORTFOLIO -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Campus Placements</div>
+  <h2>Building a Campus-Interview-Ready Portfolio</h2>
+  <div class="content" style="gap:12px;">
+    <div class="grid cols-2" style="flex:none;">
+      <div class="card git-accent" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">What Recruiters Look At</h3>
+        <ul>
+          <li style="font-size:14.5px;">📌 <b>Pinned repositories</b> — their 6 best projects, curated</li>
+          <li style="font-size:14.5px;">📝 <b>Quality README</b> per project — what it does, tech used, how to run it</li>
+          <li style="font-size:14.5px;">🧩 A <b>profile README</b> (special <code>username/username</code> repo) — a personal landing page</li>
+        </ul>
+      </div>
+      <div class="card hub-accent" style="padding:14px 18px;">
+        <h3 style="font-size:18px;">Guidance to Give Students</h3>
+        <ul>
+          <li style="font-size:14.5px;">Commit regularly (not one giant commit the night before)</li>
+          <li style="font-size:14.5px;">Write descriptive commit messages — recruiters do read history</li>
+          <li style="font-size:14.5px;">Showcase 3-4 polished projects rather than 30 empty ones</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="padding:12px 18px; flex:none;">
+      <h3 style="margin-bottom:6px;">🟩 The Contribution Graph Recruiters Check</h3>
+      <div class="contrib-grid">
+        <span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span><span class="cs"></span>
+      </div>
+      <p style="font-size:14px; margin-top:8px;" class="muted">Each square = one day's activity. Consistent small commits (not one burst before a deadline) is what this graph should show — and what recruiters notice in seconds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 36. DOS AND DONTS -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Coaching Checklist</div>
+  <h2>Do's &amp; Don'ts to Teach Students</h2>
+  <div class="content">
+    <div class="grid cols-2">
+      <div class="card green-accent">
+        <h3>✅ Do</h3>
+        <ul class="checklist">
+          <li>Commit small, logical chunks of work</li>
+          <li>Pull before you start working each session</li>
+          <li>Use branches for every new feature/assignment part</li>
+          <li>Write a README for every project</li>
+          <li>Resolve conflicts by reading both sides carefully</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:4px solid var(--pink);">
+        <h3>🚫 Don't</h3>
+        <ul class="checklist dontlist">
+          <li>Commit passwords, API keys, or <code>.env</code> files</li>
+          <li>Use <code>git push --force</code> on a shared/team branch</li>
+          <li>Make one giant commit with "final project" as the message</li>
+          <li>Work for weeks without committing anything</li>
+          <li>Panic and delete the repo when a conflict appears</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 37. DIVIDER: QUIZ -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="part-num">Q</div>
+  <div class="eyebrow">Let's Check Understanding</div>
+  <h2>Quick Quiz Time! 🎯</h2>
+  <div class="bar"></div>
+  <p>Press <kbd style="background:#21262d;border:1px solid #444c56;border-radius:4px;padding:2px 8px;">Enter</kbd> or <kbd style="background:#21262d;border:1px solid #444c56;border-radius:4px;padding:2px 8px;">Space</kbd> on each question to reveal the answer, then move to the next slide.</p>
+</section>
+
+<!-- QUIZ 1 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 1 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">🔀</div>
+  <div class="quiz-q">What is the main difference between Git and GitHub?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. They are exactly the same thing</div>
+    <div class="quiz-opt">B. Git is a programming language</div>
+    <div class="quiz-opt">C. Git is the version control tool; GitHub is a cloud hosting/collaboration service for Git repos</div>
+    <div class="quiz-opt">D. GitHub works without Git installed</div>
+  </div>
+  <div class="answer-box"><b>Answer: C.</b> Git runs locally and does the actual versioning; GitHub hosts Git repositories in the cloud and adds collaboration features.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 2 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 2 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">📦</div>
+  <div class="quiz-q">Which command moves a changed file into the staging area?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. git commit</div>
+    <div class="quiz-opt">B. git add</div>
+    <div class="quiz-opt">C. git push</div>
+    <div class="quiz-opt">D. git stage</div>
+  </div>
+  <div class="answer-box"><b>Answer: B. git add</b> — stages changes so they're included in the next commit.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 3 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 3 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">🌐</div>
+  <div class="quiz-q">True or False: In a Distributed VCS like Git, every collaborator has a full copy of the project's history.</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. True</div>
+    <div class="quiz-opt">B. False</div>
+  </div>
+  <div class="answer-box"><b>Answer: A. True.</b> That's exactly what makes Git distributed — no single point of failure, and full offline capability.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 4 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 4 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">🌿</div>
+  <div class="quiz-q">A student finished a feature on a separate branch and wants to bring it into "main". Which command do they use?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. git clone</div>
+    <div class="quiz-opt">B. git fetch</div>
+    <div class="quiz-opt">C. git merge</div>
+    <div class="quiz-opt">D. git status</div>
+  </div>
+  <div class="answer-box"><b>Answer: C. git merge.</b> While on the "main" branch, run <code>git merge feature-branch</code> to combine the histories.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 5 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 5 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">📜</div>
+  <div class="quiz-q">Why was Git originally created in 2005?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. As a university research project</div>
+    <div class="quiz-opt">B. Because BitKeeper's free license for the Linux kernel was withdrawn</div>
+    <div class="quiz-opt">C. To replace email attachments</div>
+    <div class="quiz-opt">D. GitHub requested a companion tool</div>
+  </div>
+  <div class="answer-box"><b>Answer: B.</b> Linus Torvalds built Git in about 10 days after the Linux kernel team lost free access to BitKeeper.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 6 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 6 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">🔁</div>
+  <div class="quiz-q">Which GitHub feature is best for proposing and reviewing code changes line-by-line before merging?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. Issues</div>
+    <div class="quiz-opt">B. Wiki</div>
+    <div class="quiz-opt">C. Pull Request</div>
+    <div class="quiz-opt">D. GitHub Pages</div>
+  </div>
+  <div class="answer-box"><b>Answer: C. Pull Request.</b> It's the formal review-and-merge mechanism with inline commenting.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 7 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 7 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span><span class="quiz-dot"></span></div>
+  <div class="quiz-icon">⏪</div>
+  <div class="quiz-q">A commit was already pushed and shared with teammates, but it's wrong. What's the SAFEST way to undo it?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. git reset --hard</div>
+    <div class="quiz-opt">B. git revert</div>
+    <div class="quiz-opt">C. Delete the repository and start over</div>
+    <div class="quiz-opt">D. git stash</div>
+  </div>
+  <div class="answer-box"><b>Answer: B. git revert.</b> It adds a new commit that undoes the change, without rewriting shared history.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- QUIZ 8 -->
+<section class="slide quiz-slide" data-quiz="true">
+  <div class="quiz-num">Question 8 / 8</div>
+  <div class="quiz-progress"><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot done"></span><span class="quiz-dot active"></span></div>
+  <div class="quiz-icon">🚫</div>
+  <div class="quiz-q">What file tells Git which files/folders to NEVER track (e.g. passwords, build files)?</div>
+  <div class="quiz-opts">
+    <div class="quiz-opt">A. .gitconfig</div>
+    <div class="quiz-opt">B. README.md</div>
+    <div class="quiz-opt">C. .gitignore</div>
+    <div class="quiz-opt">D. LICENSE</div>
+  </div>
+  <div class="answer-box"><b>Answer: C. .gitignore.</b> Listed patterns are excluded from tracking entirely.</div>
+  <div class="reveal-hint">Press Enter / Space to reveal answer</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- QUIZ WRAP -->
+<!-- ============================================================ -->
+<section class="slide divider">
+  <div class="eyebrow">Great Job!</div>
+  <h2>How Did You Score? 🎉</h2>
+  <div class="bar"></div>
+  <p>You now understand enough Git &amp; GitHub fundamentals to use it for your own work, AND to mentor students through their projects, assignments, and portfolios.</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- RECAP -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="eyebrow">Recap</div>
+  <h2>Key Takeaways</h2>
+  <div class="content">
+    <ul class="checklist" style="font-size:19px;">
+      <li>Version control solves the "which file is the real final version" problem forever</li>
+      <li>Git is <b>distributed</b> — every clone is a complete, independent backup</li>
+      <li>Git ≠ GitHub: tool vs. cloud collaboration platform</li>
+      <li>The daily loop is <code>status → add → commit</code>; sync with <code>push/pull</code></li>
+      <li>Branches make experimentation safe and cheap — use them freely</li>
+      <li>GitHub's Issues/Projects/Actions turn version control into full project management</li>
+      <li>Guiding students through Fork → Branch → Commit → PR builds real industry habits and interview-ready portfolios</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- THANK YOU -->
+<!-- ============================================================ -->
+<section class="slide title-slide">
+  <div class="logo-row">
+    <div class="badge git">⌥</div>
+    <div class="badge hub">🐙</div>
+  </div>
+  <h1>Thank You!</h1>
+  <div class="subtitle">Questions &amp; Open Discussion</div>
+  <div class="meta-card">
+    <div>📄 A printable <b>Git Command Cheat Sheet</b> (cheatsheet.md) accompanies this workshop.</div>
+    <div>💬 Let's discuss how to roll this out for your department's courses and student projects.</div>
+    <div>🔁 Practice is everything — try the daily loop on one real document this week.</div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function render(prevIndex, dir){
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'leaving');
+      if (i === current) s.classList.add('active');
+    });
+    document.getElementById('slideCounter').textContent = (current+1) + ' / ' + slides.length;
+    document.getElementById('progressBar').style.width = (((current+1)/slides.length)*100) + '%';
+  }
+
+  function goTo(index){
+    if (index < 0 || index >= slides.length) return;
+    current = index;
+    render();
+  }
+
+  function next(){ goTo(current + 1); }
+  function prev(){ goTo(current - 1); }
+
+  function toggleAnswer(slide){
+    const box = slide.querySelector('.answer-box');
+    if (box) box.classList.toggle('show');
+  }
+
+  document.addEventListener('keydown', function(e){
+    const activeSlide = slides[current];
+    const isQuiz = activeSlide && activeSlide.dataset.quiz === 'true';
+
+    switch(e.key){
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case 'PageDown':
+        e.preventDefault();
+        next();
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
+        prev();
+        break;
+      case ' ':
+        e.preventDefault();
+        if (isQuiz) { toggleAnswer(activeSlide); } else { next(); }
+        break;
+      case 'Enter':
+        if (isQuiz) { e.preventDefault(); toggleAnswer(activeSlide); }
+        break;
+      case 'Home':
+        e.preventDefault();
+        goTo(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        goTo(slides.length - 1);
+        break;
+    }
+  });
+
+  // Click anywhere to advance (mouse fallback), except clicking a quiz option/answer toggles it
+  document.getElementById('deck').addEventListener('click', function(e){
+    const activeSlide = slides[current];
+    if (activeSlide && activeSlide.dataset.quiz === 'true'){
+      toggleAnswer(activeSlide);
+      return;
+    }
+    next();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
