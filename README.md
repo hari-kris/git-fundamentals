@@ -1,6 +1,5 @@
 # Git to GitHub — Faculty Workshop
 
-A 2-hour workshop package introducing Git and GitHub fundamentals to college faculty who are starting their first version control journey. Built for **Vels Institute of Science, Technology & Advanced Studies (VISTAS)**.
 
 The material takes faculty from the history and purpose of version control through Git fundamentals, branching, GitHub collaboration features, and how to mentor students using Git/GitHub for assignments, projects, and interview-ready portfolios — with real-world academic examples (question papers, lab manuals, syllabus revisions, research drafts) connecting every concept.
 
