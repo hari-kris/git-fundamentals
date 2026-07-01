@@ -1,0 +1,950 @@
+
+
+
+
+
+        <LINK REL ="StyleSheet" HREF="../../resources/css/CustomizeStyle1.css" TYPE="text/css">
+
+
+
+<script language="javascript" src="../../resources/js/stripes.js" type="text/javascript"></script>
+<script src='../../resources/js/FieldValidationFrequent.js'></script>
+
+
+
+
+
+
+
+<TABLE width='100%' cellspacing="2" cellpadding="5" id="table2" class="subTable">
+    <tr>
+        <td width='5%' rowspan="2" class='subTitle' nowrap>Sl. No.</td>
+        <td width='15%' rowspan="2" class='subTitle' nowrap>Admission No.</td>
+        <td width='15%' rowspan="2" class='subTitle' nowrap>Register No.</td>
+        <td width='20%' rowspan="2" class='subTitle' nowrap>Student Name</td>
+        <td width='10%' rowspan="2" class='subTitle' nowrap>Total Hrs</td>
+        
+            
+            <td width='10%' colspan="2" class='subTitle' nowrap>Absent</td>
+        
+            
+            <td width='10%' colspan="2" class='subTitle' nowrap>Present</td>
+        
+            
+            <td width='10%' colspan="2" class='subTitle' nowrap>Medical Leave</td>
+        
+    </tr>
+    <tr>
+        
+        <td width='5%'  class='subTitle'>in (Hrs)</td>
+        <td width='5%'  class='subTitle'>in (%)</td>                
+        
+        <td width='5%'  class='subTitle'>in (Hrs)</td>
+        <td width='5%'  class='subTitle'>in (%)</td>                
+        
+        <td width='5%'  class='subTitle'>in (Hrs)</td>
+        <td width='5%'  class='subTitle'>in (%)</td>                
+        
+    </tr>
+    
+
+          
+        <tr>
+            <td nowrap>1</td>
+            <td align='center' nowrap>UP21G6190048</td>
+            <td align='center' nowrap>21619113</td>
+            <td nowrap>KARTHICK RAJA   M</td>
+            <td align='right' nowrap>55</td>
+            
+            <td align='right' nowrap>15</td>
+            <td align='right' nowrap>27.27</td>
+            
+            <td align='right' nowrap>40</td>
+            <td align='right' nowrap>72.73</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>2</td>
+            <td align='center' nowrap>UP22G6190033</td>
+            <td align='center' nowrap>22619161</td>
+            <td nowrap>SOWMIYA S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>17</td>
+            <td align='right' nowrap>19.10</td>
+            
+            <td align='right' nowrap>72</td>
+            <td align='right' nowrap>80.90</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>3</td>
+            <td align='center' nowrap>UP22G6190034</td>
+            <td align='center' nowrap>22619158</td>
+            <td nowrap>SANJAYKUMAR G</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>11</td>
+            <td align='right' nowrap>12.36</td>
+            
+            <td align='right' nowrap>78</td>
+            <td align='right' nowrap>87.64</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>4</td>
+            <td align='center' nowrap>UP22G6190035</td>
+            <td align='center' nowrap>22619163</td>
+            <td nowrap>SUDHEERKUMAR R</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>13</td>
+            <td align='right' nowrap>14.44</td>
+            
+            <td align='right' nowrap>77</td>
+            <td align='right' nowrap>85.56</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>5</td>
+            <td align='center' nowrap>UP22G6190036</td>
+            <td align='center' nowrap>22619167</td>
+            <td nowrap>YUVASREE ROY A P</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>2</td>
+            <td align='right' nowrap>2.22</td>
+            
+            <td align='right' nowrap>88</td>
+            <td align='right' nowrap>97.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>6</td>
+            <td align='center' nowrap>UP22G6190041</td>
+            <td align='center' nowrap>22619160</td>
+            <td nowrap>SHIVANI V</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+            <td align='right' nowrap>89</td>
+            <td align='right' nowrap>100.00</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>7</td>
+            <td align='center' nowrap>UP22G6190048</td>
+            <td align='center' nowrap>22619154</td>
+            <td nowrap>RAJKUMAR B</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>6</td>
+            <td align='right' nowrap>6.74</td>
+            
+            <td align='right' nowrap>83</td>
+            <td align='right' nowrap>93.26</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>8</td>
+            <td align='center' nowrap>UP22G6190049</td>
+            <td align='center' nowrap>22619156</td>
+            <td nowrap>SACKRATIS  S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>25</td>
+            <td align='right' nowrap>27.78</td>
+            
+            <td align='right' nowrap>65</td>
+            <td align='right' nowrap>72.22</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>9</td>
+            <td align='center' nowrap>UP22G6190050</td>
+            <td align='center' nowrap>22619168</td>
+            <td nowrap>YUVESH BABU T</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>17</td>
+            <td align='right' nowrap>18.89</td>
+            
+            <td align='right' nowrap>73</td>
+            <td align='right' nowrap>81.11</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>10</td>
+            <td align='center' nowrap>UP22G6190052</td>
+            <td align='center' nowrap>22619155</td>
+            <td nowrap>RITHICK ROSHAN S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>11</td>
+            <td align='right' nowrap>12.22</td>
+            
+            <td align='right' nowrap>79</td>
+            <td align='right' nowrap>87.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>11</td>
+            <td align='center' nowrap>UP22G6190056</td>
+            <td align='center' nowrap>22619162</td>
+            <td nowrap>SRIDHAR R</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>28</td>
+            <td align='right' nowrap>31.46</td>
+            
+            <td align='right' nowrap>61</td>
+            <td align='right' nowrap>68.54</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>12</td>
+            <td align='center' nowrap>UP22G6190057</td>
+            <td align='center' nowrap>22619172</td>
+            <td nowrap>SARATH KUMAR  M</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>31</td>
+            <td align='right' nowrap>34.44</td>
+            
+            <td align='right' nowrap>59</td>
+            <td align='right' nowrap>65.56</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>13</td>
+            <td align='center' nowrap>UP22G6190058</td>
+            <td align='center' nowrap>22619171</td>
+            <td nowrap>NAREN S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>28</td>
+            <td align='right' nowrap>31.46</td>
+            
+            <td align='right' nowrap>61</td>
+            <td align='right' nowrap>68.54</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>14</td>
+            <td align='center' nowrap>UP22G6190060</td>
+            <td align='center' nowrap>22619164</td>
+            <td nowrap>VARUN  S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+            <td align='right' nowrap>90</td>
+            <td align='right' nowrap>100.00</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>15</td>
+            <td align='center' nowrap>UP22G6190061</td>
+            <td align='center' nowrap>22619169</td>
+            <td nowrap>ASWATHI S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>11</td>
+            <td align='right' nowrap>12.22</td>
+            
+            <td align='right' nowrap>79</td>
+            <td align='right' nowrap>87.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>16</td>
+            <td align='center' nowrap>UP22G6190062</td>
+            <td align='center' nowrap>22619170</td>
+            <td nowrap>MOTHESH N</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>9</td>
+            <td align='right' nowrap>10.00</td>
+            
+            <td align='right' nowrap>81</td>
+            <td align='right' nowrap>90.00</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>17</td>
+            <td align='center' nowrap>UP22G6190063</td>
+            <td align='center' nowrap>22619173</td>
+            <td nowrap>SUDHARSON S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>25</td>
+            <td align='right' nowrap>27.78</td>
+            
+            <td align='right' nowrap>65</td>
+            <td align='right' nowrap>72.22</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>18</td>
+            <td align='center' nowrap>UP22G6190065</td>
+            <td align='center' nowrap>22619174</td>
+            <td nowrap>PRASANNA S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>12</td>
+            <td align='right' nowrap>13.48</td>
+            
+            <td align='right' nowrap>77</td>
+            <td align='right' nowrap>86.52</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>19</td>
+            <td align='center' nowrap>UP22G6190066</td>
+            <td align='center' nowrap>22619175</td>
+            <td nowrap>VISHWA S</td>
+            <td align='right' nowrap>97</td>
+            
+            <td align='right' nowrap>25</td>
+            <td align='right' nowrap>25.77</td>
+            
+            <td align='right' nowrap>72</td>
+            <td align='right' nowrap>74.23</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>20</td>
+            <td align='center' nowrap>UP22G6190067</td>
+            <td align='center' nowrap>22619176</td>
+            <td nowrap>PREMKUMAR K</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>20</td>
+            <td align='right' nowrap>22.47</td>
+            
+            <td align='right' nowrap>69</td>
+            <td align='right' nowrap>77.53</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>21</td>
+            <td align='center' nowrap>UP22G6190068</td>
+            <td align='center' nowrap>22619177</td>
+            <td nowrap>ABINAYA S</td>
+            <td align='right' nowrap>84</td>
+            
+            <td align='right' nowrap>13</td>
+            <td align='right' nowrap>15.48</td>
+            
+            <td align='right' nowrap>71</td>
+            <td align='right' nowrap>84.52</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>22</td>
+            <td align='center' nowrap>UP22G6190069</td>
+            <td align='center' nowrap>22619178</td>
+            <td nowrap>DIXIT KUMAR V</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>25</td>
+            <td align='right' nowrap>27.78</td>
+            
+            <td align='right' nowrap>65</td>
+            <td align='right' nowrap>72.22</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>23</td>
+            <td align='center' nowrap>UP22G6190070</td>
+            <td align='center' nowrap>22619183</td>
+            <td nowrap>SUBBIAH VISHWA  R</td>
+            <td align='right' nowrap>79</td>
+            
+            <td align='right' nowrap>30</td>
+            <td align='right' nowrap>37.97</td>
+            
+            <td align='right' nowrap>49</td>
+            <td align='right' nowrap>62.03</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>24</td>
+            <td align='center' nowrap>UP22G6190071</td>
+            <td align='center' nowrap>22619179</td>
+            <td nowrap>ENUGULA VENKAT SAI</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>30</td>
+            <td align='right' nowrap>33.33</td>
+            
+            <td align='right' nowrap>60</td>
+            <td align='right' nowrap>66.67</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>25</td>
+            <td align='center' nowrap>UP22G6190072</td>
+            <td align='center' nowrap>22619180</td>
+            <td nowrap>GAWSIK M</td>
+            <td align='right' nowrap>79</td>
+            
+            <td align='right' nowrap>33</td>
+            <td align='right' nowrap>41.77</td>
+            
+            <td align='right' nowrap>46</td>
+            <td align='right' nowrap>58.23</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>26</td>
+            <td align='center' nowrap>UP22G6190073</td>
+            <td align='center' nowrap>22619181</td>
+            <td nowrap>SIVANANTHA PRABU S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>44</td>
+            <td align='right' nowrap>49.44</td>
+            
+            <td align='right' nowrap>45</td>
+            <td align='right' nowrap>50.56</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>27</td>
+            <td align='center' nowrap>UP22G6190074</td>
+            <td align='center' nowrap>22619182</td>
+            <td nowrap>SRIJA V</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>2</td>
+            <td align='right' nowrap>2.22</td>
+            
+            <td align='right' nowrap>88</td>
+            <td align='right' nowrap>97.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>28</td>
+            <td align='center' nowrap>UP22G6190076</td>
+            <td align='center' nowrap>22619185</td>
+            <td nowrap>VISWAAKARSAN S R</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>18</td>
+            <td align='right' nowrap>20.22</td>
+            
+            <td align='right' nowrap>71</td>
+            <td align='right' nowrap>79.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>29</td>
+            <td align='center' nowrap>UP22G6190078</td>
+            <td align='center' nowrap>22619189</td>
+            <td nowrap>MERISHA A</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+            <td align='right' nowrap>89</td>
+            <td align='right' nowrap>100.00</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>30</td>
+            <td align='center' nowrap>UP22G6190079</td>
+            <td align='center' nowrap>22619192</td>
+            <td nowrap>RAKESH KUMAR P</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>13</td>
+            <td align='right' nowrap>14.61</td>
+            
+            <td align='right' nowrap>76</td>
+            <td align='right' nowrap>85.39</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>31</td>
+            <td align='center' nowrap>UP22G6190080</td>
+            <td align='center' nowrap>22619188</td>
+            <td nowrap>HEMNATH A</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>31</td>
+            <td align='right' nowrap>34.44</td>
+            
+            <td align='right' nowrap>59</td>
+            <td align='right' nowrap>65.56</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>32</td>
+            <td align='center' nowrap>UP22G6190081</td>
+            <td align='center' nowrap>22619190</td>
+            <td nowrap>NITHYA SANTHOSH P</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>3</td>
+            <td align='right' nowrap>3.37</td>
+            
+            <td align='right' nowrap>86</td>
+            <td align='right' nowrap>96.63</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>33</td>
+            <td align='center' nowrap>UP22G6190084</td>
+            <td align='center' nowrap>22619186</td>
+            <td nowrap>ASHFAQ AHMED S U</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>29</td>
+            <td align='right' nowrap>32.22</td>
+            
+            <td align='right' nowrap>61</td>
+            <td align='right' nowrap>67.78</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>34</td>
+            <td align='center' nowrap>UP22G6190087</td>
+            <td align='center' nowrap>22619193</td>
+            <td nowrap>AADHARSH S</td>
+            <td align='right' nowrap>86</td>
+            
+            <td align='right' nowrap>22</td>
+            <td align='right' nowrap>25.58</td>
+            
+            <td align='right' nowrap>64</td>
+            <td align='right' nowrap>74.42</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>35</td>
+            <td align='center' nowrap>UP22G6190088</td>
+            <td align='center' nowrap>22619194</td>
+            <td nowrap>DARWIN S</td>
+            <td align='right' nowrap>90</td>
+            
+            <td align='right' nowrap>28</td>
+            <td align='right' nowrap>31.11</td>
+            
+            <td align='right' nowrap>62</td>
+            <td align='right' nowrap>68.89</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>36</td>
+            <td align='center' nowrap>UP22G6190091</td>
+            <td align='center' nowrap>22619157</td>
+            <td nowrap>SAJATH ISMAIL S</td>
+            <td align='right' nowrap>86</td>
+            
+            <td align='right' nowrap>10</td>
+            <td align='right' nowrap>11.63</td>
+            
+            <td align='right' nowrap>76</td>
+            <td align='right' nowrap>88.37</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>37</td>
+            <td align='center' nowrap>UP22G6190092</td>
+            <td align='center' nowrap>22619159</td>
+            <td nowrap>SARAN RAJ T</td>
+            <td align='right' nowrap>80</td>
+            
+            <td align='right' nowrap>3</td>
+            <td align='right' nowrap>3.75</td>
+            
+            <td align='right' nowrap>62</td>
+            <td align='right' nowrap>77.50</td>
+            
+            <td align='right' nowrap>15</td>
+            <td align='right' nowrap>18.75</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>38</td>
+            <td align='center' nowrap>UP22G6190093</td>
+            <td align='center' nowrap>22619165</td>
+            <td nowrap>VETRIVEL S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>15</td>
+            <td align='right' nowrap>16.85</td>
+            
+            <td align='right' nowrap>74</td>
+            <td align='right' nowrap>83.15</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>39</td>
+            <td align='center' nowrap>UP22G6190094</td>
+            <td align='center' nowrap>22619166</td>
+            <td nowrap>YOGESH MUTHURAM S</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>28</td>
+            <td align='right' nowrap>31.46</td>
+            
+            <td align='right' nowrap>61</td>
+            <td align='right' nowrap>68.54</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>40</td>
+            <td align='center' nowrap>UP22G6190096</td>
+            <td align='center' nowrap>22619196</td>
+            <td nowrap>ZIYAD Z</td>
+            <td align='right' nowrap>97</td>
+            
+            <td align='right' nowrap>36</td>
+            <td align='right' nowrap>37.11</td>
+            
+            <td align='right' nowrap>61</td>
+            <td align='right' nowrap>62.89</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>41</td>
+            <td align='center' nowrap>UP22T6190001</td>
+            <td align='center' nowrap>22619901</td>
+            <td nowrap>AMIRTHAVANAN N</td>
+            <td align='right' nowrap>80</td>
+            
+            <td align='right' nowrap>10</td>
+            <td align='right' nowrap>12.50</td>
+            
+            <td align='right' nowrap>70</td>
+            <td align='right' nowrap>87.50</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>42</td>
+            <td align='center' nowrap>UP23L6190001</td>
+            <td align='center' nowrap>22619501</td>
+            <td nowrap>SANTHOSH R</td>
+            <td align='right' nowrap>97</td>
+            
+            <td align='right' nowrap>18</td>
+            <td align='right' nowrap>18.56</td>
+            
+            <td align='right' nowrap>79</td>
+            <td align='right' nowrap>81.44</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>43</td>
+            <td align='center' nowrap>UP23T6190001</td>
+            <td align='center' nowrap>22619903</td>
+            <td nowrap>ROGAN B</td>
+            <td align='right' nowrap>87</td>
+            
+            <td align='right' nowrap>17</td>
+            <td align='right' nowrap>19.54</td>
+            
+            <td align='right' nowrap>70</td>
+            <td align='right' nowrap>80.46</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>44</td>
+            <td align='center' nowrap>UP23T6190003</td>
+            <td align='center' nowrap>22619902</td>
+            <td nowrap>ELISHA PAUL</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>22</td>
+            <td align='right' nowrap>24.72</td>
+            
+            <td align='right' nowrap>67</td>
+            <td align='right' nowrap>75.28</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+
+          
+        <tr>
+            <td nowrap>45</td>
+            <td align='center' nowrap>UP23T6190006</td>
+            <td align='center' nowrap>22619904</td>
+            <td nowrap>THOTA CHARAN</td>
+            <td align='right' nowrap>89</td>
+            
+            <td align='right' nowrap>17</td>
+            <td align='right' nowrap>19.10</td>
+            
+            <td align='right' nowrap>72</td>
+            <td align='right' nowrap>80.90</td>
+            
+            <td align='right' nowrap>0</td>
+            <td align='right' nowrap>0.00</td>
+            
+        </tr>
+    
+</TABLE>
